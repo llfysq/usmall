@@ -6,7 +6,7 @@
     <v-add :info="info" ref="add"></v-add>
 
     <!-- 列表 -->
-    <v-list @edit="edit"></v-list>
+    <v-list @edit="edit($event)"></v-list>
   </div>
 </template>
 <script>

@@ -11,6 +11,7 @@ import cate from "./modules/cate"
 import member from "./modules/member"
 import seckill from "./modules/seckill"
 import spec from "./modules/spec"
+import banner from "./modules/banner"
 
 export default new Vuex.Store({
     state,
@@ -24,6 +25,7 @@ export default new Vuex.Store({
         cate,
         member,
         seckill,
-        spec
+        spec,
+        banner
     }
 })

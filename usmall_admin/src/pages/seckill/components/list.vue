@@ -1,8 +1,8 @@
 <template>
-<div class='box'>
-    <el-table :data="memberList" style="width: 100%">
-      <el-table-column prop="id" label="活动名称" width="180"></el-table-column>
-   
+  <div class="box">
+    <el-table :data="seckillList" style="width: 100%">
+      <el-table-column prop="title" label="活动名称" width="180"></el-table-column>
+
       <el-table-column label="状态">
         <template slot-scope="scope">
           <el-button v-if="scope.row.status==1" type="primary">启用</el-button>
@@ -11,39 +11,53 @@
       </el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button type="primary" @click="edit(scope.row.uid)">编辑</el-button>
-          <del-btn @confirm="del(scope.row.uid)"></del-btn>
+          <el-button type="primary" @click="edit(scope.row.id)">编辑</el-button>
+          <del-btn @confirm="del(scope.row.id)"></del-btn>
         </template>
       </el-table-column>
     </el-table>
- </div>
- <!--  -->
+  </div>
+  <!--  -->
 </template>
 <script>
-import {mapGetters,mapActions} from "vuex"
+import { mapGetters, mapActions } from "vuex";
+import {successAlert,warningAlert} from "../../../util/alert"
+import { requestSeckillDelete } from "../../../util/request";
 export default {
-    computed:{
-        ...mapGetters({
-            memberList:"member/list"
-        })
-    },
-components: {},
-data() {
-return {
-  
-};
-},
-methods: {
+  computed: {
+    ...mapGetters({
+      seckillList: "seckill/list",
+    }),
+  },
+  components: {},
+  data() {
+    return {};
+  },
+  methods: {
+    ...mapActions({
+      requestList:"seckill/requestList"
+    }),
     // 编辑
-    edit(){
-
+    edit(id) {
+      this.$emit("edit",id)
     },
     // 删除
-    del(){
-
+    del(id) {
+      requestSeckillDelete({ id: id }).then((res) => {
+        if(res.data.code==200){
+          successAlert("删除成功")
+          this.requestList()
+        }else{
+          warningAlert(res.data.msg)
+        }
+      });
+    },
+  },
+  mounted() {
+    if(this.seckillList.length==0){
+      this.requestList()
     }
-},
-mounted() {}
+  },
 };
 </script>
 <style scoped>

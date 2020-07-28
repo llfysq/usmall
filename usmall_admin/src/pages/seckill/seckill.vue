@@ -3,9 +3,9 @@
 <div>
     <el-button type="primary" @click="add">添加</el-button>
     <!-- 列表 -->
-    <v-list></v-list>
+    <v-list @edit="edit($event)"></v-list>
     <!-- 添加 -->
-    <v-add :info="info"></v-add>
+    <v-add :info="info" ref="add"></v-add>
 </div>
 </template>
 <script>
@@ -19,8 +19,9 @@ components:{
 data(){
 return {
     info:{
-        show:true,
-        title:"秒杀活动添加"
+        show:false,
+        title:"秒杀活动添加",
+        isAdd:true
     }
 }
 },
@@ -31,6 +32,13 @@ methods:{
       this.info.title = "秒杀活动添加";
       this.info.isAdd = true;
     },
+    // 点击编辑按钮
+    edit(id){
+    this.info.show = true;
+      this.info.title = "秒杀活动编辑";
+      this.info.isAdd = false; 
+    this.$refs.add.getDetail(id)
+    }
 },
 mounted(){},
 }

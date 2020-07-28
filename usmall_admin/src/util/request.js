@@ -1,6 +1,5 @@
 import axios from "axios"
 import qs from "qs"
-import url from "postcss-url"
 
 //响应拦截
 axios.interceptors.response.use(res => {
@@ -284,6 +283,59 @@ export const requestMemberUpdate=(params)=>{
     })
 }
 
+//轮播图添加
+export const requestBannerAdd = params => {
+     //如果data中含有文件
+       var form=new FormData();
+       for(var i in params){
+           form.append(i,params[i])
+       }
+    return axios({
+        url: baseUrl + "/api/banneradd",
+        method: "post",
+        data:form
+    })
+}
+//轮播图列表
+export const requestBannerList=()=>{
+    return axios({
+        url:baseUrl+"/api/bannerlist",
+        method:"get",
+        
+    })
+}
+//轮播图获取一条数据
+export const requestBannerDetail=params=>{
+    return axios({
+        url:baseUrl+"/api/bannerinfo",
+        method:"get",
+        params
+    })
+}
+//轮播图修改
+export const requestBannerUpdate=(params)=>{
+    //如果data中含有文件
+       var form=new FormData();
+       for(var i in params){
+           form.append(i,params[i])
+       }
+    return axios({
+        url:baseUrl+"/api/banneredit",
+        method:"post",
+        data:form
+    })
+}
+//轮播图删除
+export const requestBannerDelete=(params)=>{
+    return axios({
+        url:baseUrl+"/api/bannerdelete",
+        method:"post",
+        data:qs.stringify(params)
+    })
+}
+
+
+
 //秒杀活动添加
 export const requestSeckillAdd = (params) => {
     return axios({
@@ -326,3 +378,4 @@ export const requestSeckillDelete = params => {
         data: qs.stringify(params)
     })
 }
+

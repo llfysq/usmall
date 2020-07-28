@@ -1,17 +1,20 @@
-import {requestSeckillList} from "../../util/request"
-// 秒杀活动
+//分类 
 
+import {requestBannerList} from "../../util/request"
 const state={
+    //列表数据
     list:[]
 }
 const mutations={
+    //修改list
     changeList(state,arr){
-        state.list=arr
+        state.list=arr;
     }
 }
 const actions={
     requestList(context){
-        requestSeckillList().then(res=>{
+        
+        requestBannerList({istree:true}).then(res=>{
             context.commit("changeList",res.data.list)
         })
     }
@@ -21,7 +24,7 @@ const getters={
         return state.list
     }
 }
-export default{
+export default {
     state,
     mutations,
     actions,
