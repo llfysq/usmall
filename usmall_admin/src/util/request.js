@@ -379,3 +379,61 @@ export const requestSeckillDelete = params => {
     })
 }
 
+//商品添加
+export const requestGoogsAdd = params => {
+     //如果data中含有文件
+       var form=new FormData();
+       for(var i in params){
+           form.append(i,params[i])
+       }
+    return axios({
+        url: baseUrl + "/api/goodsadd",
+        method: "post",
+        data:form
+    })
+}
+//商品总数
+export const requestGoogsSum=()=>{
+    return axios({
+        url:baseUrl+"/api/goodscount",
+        method:"get",
+        
+    })
+}
+//商品列表
+export const requestGoogsList=(params)=>{
+    return axios({
+        url:baseUrl+"/api/goodslist",
+        method:"get",
+        params
+    })
+}
+//商品获取一条数据
+export const requestGoogsDetail=params=>{
+    return axios({
+        url:baseUrl+"/api/goodsinfo",
+        method:"get",
+        params
+    })
+}
+//商品修改
+export const requestGoogsUpdate=(params)=>{
+    //如果data中含有文件
+       var form=new FormData();
+       for(var i in params){
+           form.append(i,params[i])
+       }
+    return axios({
+        url:baseUrl+"/api/goodsedit",
+        method:"post",
+        data:form
+    })
+}
+//商品删除
+export const requestGoogsDelete=(params)=>{
+    return axios({
+        url:baseUrl+"/api/goodsdelete",
+        method:"post",
+        data:qs.stringify(params)
+    })
+}

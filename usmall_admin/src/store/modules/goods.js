@@ -1,5 +1,5 @@
-// 商品规格
-import {requestSpecList,requestSpecSum} from "../../util/request"
+//管理员管理
+import {requestGoogsList,requestGoogsSum} from "../../util/request"
 
 // 数据
 const state={
@@ -16,9 +16,6 @@ const state={
 const mutations={
     //列表数据
     changeList(state,arr){
-        arr.forEach(i => {
-            i.attrs=JSON.parse(i.attrs)
-        });
         state.list=arr
     },
     // 数据总数量
@@ -33,32 +30,18 @@ const mutations={
 // 方法
 const actions={
      //列表数据
-     //调用这个action,如果要分页，就不用传参；如果要取所有的数据，就传递一个true
-    requestList(context,bool){
-        // add页面传过来一个bool值ture,请求所有的规格属性，是ture的时候就不走分页的，走分页就只能获取到一部分数据而已
-        var params={}
-        if(bool){
-            params={}//空对象可以取到所有的数据
-        }else{
-            params={
+    requestList(context){
+        const params={
             page:context.state.page,
             size:context.state.size
         }
-        }
-       
-        requestSpecList(params).then(res=>{
-             //没有取到数据
-             if(res.data.list.length==0&&context.state.page>1){
-                context.commit("changePage",context.state.page-1);
-                context.dispatch("requestList")
-                return;
-            }
+        requestGoogsList(params).then(res=>{
             context.commit("changeList",res.data.list)
         })
     },
     // 数据总数量
     requestTotal(context){
-        requestSpecSum().then(res=>{
+        requestGoogsSum().then(res=>{
             context.commit("changeTotal",res.data.list[0].total)
         })
     },

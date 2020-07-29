@@ -1,104 +1,91 @@
 <template>
   <div class="box">
-    <el-table :data="tableData" style="width: 100%">
-      <el-table-column prop="date" label="商品编号" width="180"></el-table-column>
-      <el-table-column prop="name" label="商品名称" width="180"></el-table-column>
-      <el-table-column prop="address" label="商品价格"></el-table-column>
-      <el-table-column prop="address" label="市场价格"></el-table-column>
-      <el-table-column prop="address" label="图片">
-        <el-upload
-          class="avatar-uploader"
-          action="https://jsonplaceholder.typicode.com/posts/"
-          :show-file-list="false"
-         
-        >
-          <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
-      </el-table-column>
-      <el-table-column prop="address" label="是否新品">
-        <template>
-          <el-button type="primary">是</el-button>
-          <el-button type="danger">否</el-button>
+    <el-table :data="list" style="width: 100%" >
+      <el-table-column prop="id" label="商品编号" width="180"></el-table-column>
+      <el-table-column prop="goodsname" label="商品名称" width="180"></el-table-column>
+      <el-table-column prop="price" label="商品价格"></el-table-column>
+      <el-table-column prop="market_price" label="市场价格"></el-table-column>
+    <el-table-column label="图片" width="180">
+        <template slot-scope="scope">
+            <img :src="$imgPre+scope.row.img" alt="">
         </template>
       </el-table-column>
-      <el-table-column prop="address" label="是否热卖">
-        <template>
-          <el-button type="primary">是</el-button>
-          <el-button type="danger">否</el-button>
+      <el-table-column prop="isnew" label="是否新品">
+        <template slot-scope="scope">
+          <el-button type="primary" v-if="scope.row.isnew==1">是</el-button>
+          <el-button type="danger" v-else>否</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="address" label="状态">
-        <template>
-          <el-button type="primary">启用</el-button>
-          <el-button type="danger">禁用</el-button>
+      <el-table-column prop="ishot" label="是否热卖">
+        <template slot-scope="scope">
+          <el-button type="primary" v-if="scope.row.ishot==1">是</el-button>
+          <el-button type="danger" v-else>否</el-button>
         </template>
       </el-table-column>
-      <el-table-column prop="address" label="操作">
-        <template>
-          <el-button type="primary">编辑</el-button>
-          <del-btn>删除</del-btn>
+      <el-table-column prop="status" label="状态">
+        <template slot-scope="scope">
+          <el-button type="primary"  v-if="scope.row.status==1">启用</el-button>
+          <el-button type="danger" v-else>禁用</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button type="primary" @click="adite(scope.row.id)">编辑</el-button>
+          <del-btn  @confirm="del(scope.row.id)">删除</del-btn>
         </template>
       </el-table-column>
     </el-table>
   </div>
 </template>
 <script>
+import { mapActions, mapGetters } from "vuex";
+import {requestGoogsDelete} from "../../../util/request"
+import {successAlert,warningAlert} from "../../../util/alert"
 export default {
-  components: {},
+  computed:{
+    ...mapGetters({
+      list:"goods/list",
+      total:"goods/total",
+      size:"goods/size"
+    })
+  },
   data() {
     return {
-          imageUrl: '',
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄",
-        },
-      ],
+         
     };
   },
-  methods: {},
-  mounted() {},
+  methods: {
+    ...mapActions({
+      requestList: "goods/requestList",
+      requestTotal: "goods/requestTotal",
+      requestChangePage: "goods/requestChangePage",
+    }),
+
+    adite(id) {
+      // console.log(scope)
+      this.$emit("edit", id);
+    },
+    // 删除
+    del(id){
+          requestGoogsDelete({id:id}).then(res=>{
+              if(res.data.code==200){
+                  successAlert("删除成功")
+                  this.requestList()
+              }else{
+                  warningAlert(res.data.msg)
+              }
+          })
+      }
+
+  },
+  mounted() {
+    this.requestList();
+  },
 };
 </script>
-<style scoped lang="stylus">
-.box >>> .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .box >>> .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .box >>> .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .box >>> .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
+<style scoped >
+img{
+  width: 100px;
+  height: 100px;
+}
 </style>

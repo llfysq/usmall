@@ -29,7 +29,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUi)
 // 上传图片前缀
 Vue.prototype.$imgPre="http://localhost:3000"
-
+// 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

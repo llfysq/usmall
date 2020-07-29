@@ -103,6 +103,8 @@ export default {
           successAlert(res.data.msg);
           this.empty();
           this.cancel();
+          //重新获取角色列表数据
+          this.requestTotal();
           this.requestSpecList();
         } else {
           warningAlert(res.data.msg);
@@ -143,7 +145,7 @@ export default {
   },
   mounted() {
     if(this.list.length==0){
-      this.requestSpecList
+      this.requestSpecList()
     }
   },
 };
