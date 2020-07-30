@@ -41,9 +41,9 @@
           <el-select v-model="form.goodsid">
             <el-option label="请选择分类" value disabled></el-option>
             <el-option
-              v-for="item in cateList"
+              v-for="item in threeCateList"
               :key="item.id"
-              :label="item.catename"
+              :label="item.goodsname"
               :value="item.id"
             ></el-option>
           </el-select>
@@ -65,6 +65,7 @@ import {
   requestSeckillAdd,
   requestSeckillDetail,
   requestSeckillUpdate,
+  requestGoogsList
 } from "../../../util/request";
 import { successAlert, warningAlert } from "../../../util/alert";
 import { mapGetters, mapActions } from "vuex";
@@ -73,6 +74,7 @@ export default {
   computed: {
     ...mapGetters({
       cateList: "cate/list",
+      goodsList: "goods/list",
     }),
   },
   data() {
@@ -89,12 +91,15 @@ export default {
       },
       // 二级分类的数组
       secondCateList: [],
+      // 三级分类数组
+      threeCateList:[]
     };
   },
   methods: {
     ...mapActions({
       requestCateList: "cate/requestList",
       requestSeckillList: "seckill/requestList",
+      // requestGoodsList: "goods/requestList",
     }),
     // 取消
     cancel() {
@@ -102,6 +107,11 @@ export default {
     },
     // 清空
     empty() {
+      this.value1="",
+      // 二级分类的数组
+      this.secondCateList= [],
+      // 三级分类数组
+      this.threeCateList=[]
       this.form = {
         title: "",
         begintime: "",
@@ -125,22 +135,21 @@ export default {
     },
     // 修改二级分类,通过二级分类获取到他的children，进行三级联动，商品的选择
     changeSecond() {
-      let index1=this.secondCateList.findIndex((item1)=>item1.id==this.form.second_cateid);
-      //   console.log(index1);
-      // console.log(this.secondCateList[index1]);
-      this.threeCateList=this.secondCateList[index1].children;
-      this.form.goodsid="";
-
+     requestGoogsList({fid:this.form.first_cateid,sid:this.form.second_cateid}).then(res=>{
+       if(res.data.code==200){
+         this.threeCateList=res.data.list
+        //  console.log( this.threeCateList);
+       }
+     })
+     
     },
-
-
-
     // 获取开始结束的时间，将获得的时间转换为时间戳
     changeTime(e) {
+      console.log(e)
        this.form.begintime = new Date(this.value1[0]).getTime();
        this.form.endtime = new Date(this.value1[1]).getTime();
-       console.log( this.form.begintime)
-       console.log( this.form.endtime)
+      //  console.log( this.form.begintime)
+      //  console.log( this.form.endtime)
     },
 
     // 添加
@@ -161,6 +170,10 @@ export default {
       requestSeckillDetail({ id: id }).then((res) => {
         this.form = res.data.list;
         this.form.id = id;
+        // 将时间戳取出来转换为标准时间
+        this.form.begintime=new Date(JSON.parse(res.data.list.begintime))
+        this.form.endtime=new Date(JSON.parse(res.data.list.endtime))
+        this.value1=[ this.form.begintime,this.form.endtime]
       });
     },
     // 点击编辑

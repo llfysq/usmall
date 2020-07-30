@@ -21,7 +21,7 @@
 </template>
 <script>
 import { mapGetters, mapActions } from "vuex";
-import {successAlert,warningAlert} from "../../../util/alert"
+import { successAlert, warningAlert } from "../../../util/alert";
 import { requestSeckillDelete } from "../../../util/request";
 export default {
   computed: {
@@ -35,27 +35,27 @@ export default {
   },
   methods: {
     ...mapActions({
-      requestList:"seckill/requestList"
+      requestList: "seckill/requestList",
     }),
     // 编辑
     edit(id) {
-      this.$emit("edit",id)
+      this.$emit("edit", id);
     },
     // 删除
     del(id) {
       requestSeckillDelete({ id: id }).then((res) => {
-        if(res.data.code==200){
-          successAlert("删除成功")
-          this.requestList()
-        }else{
-          warningAlert(res.data.msg)
+        if (res.data.code == 200) {
+          successAlert("删除成功");
+          this.requestList();
+        } else {
+          warningAlert(res.data.msg);
         }
       });
     },
   },
   mounted() {
-    if(this.seckillList.length==0){
-      this.requestList()
+    if (this.seckillList.length == 0) {
+      this.requestList();
     }
   },
 };

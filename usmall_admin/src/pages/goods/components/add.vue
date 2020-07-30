@@ -140,6 +140,7 @@ export default {
        //获取商品列表
       requestGoogsList: "goods/requestList",
     }),
+
      //创建富文本编辑器
     createEditor() {
       this.editor = new E("#desc");
@@ -238,9 +239,9 @@ export default {
           successAlert(res.data.msg);
           this.empty();
           this.cancel();
-           // //重新获取角色列表数据
+           //  //重新获取总的数量
           this.requestGoodsCount();
-            // //重新获取总的数量
+            ////重新获取角色列表数据
           this.requestGoogsList();
         } else {
           warningAlert(res.data.msg);
@@ -249,7 +250,7 @@ export default {
     },
     getDetail(id) {
       requestGoogsDetail({ id: id }).then((res) => {
-          console.log(res)
+          // console.log(res)
         this.form = res.data.list;
         // 补一个id
         this.form.id = id;
@@ -261,6 +262,7 @@ export default {
         this.changeSpec(true);
         // 商品规格属性
         this.form.specsattr = JSON.parse(this.form.specsattr);
+        // console.log( this.form.specsattr)
       });
     },
     // 点击修改按钮
@@ -319,4 +321,5 @@ export default {
   height: 178px;
   display: block;
 }
+
 </style>

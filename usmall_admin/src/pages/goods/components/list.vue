@@ -35,6 +35,9 @@
         </template>
       </el-table-column>
     </el-table>
+     <!-- 分页 -->
+
+    <el-pagination background layout="prev, pager, next" @current-change="cPage" :page-size="size" :total="total"></el-pagination>
   </div>
 </template>
 <script>
@@ -71,14 +74,23 @@ export default {
               if(res.data.code==200){
                   successAlert("删除成功")
                   this.requestList()
+                   this.requestTotal()
               }else{
                   warningAlert(res.data.msg)
               }
           })
-      }
+      },
+       //修改页码
+    cPage(a){
+      // 把当前页面的页码传给requestChangePage
+        this.requestChangePage(a)
+        this.requestList()
+    }
+ 
 
   },
   mounted() {
+      this.requestTotal();
     this.requestList();
   },
 };
