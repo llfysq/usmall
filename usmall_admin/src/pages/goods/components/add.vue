@@ -234,6 +234,29 @@ export default {
       this.form.description = this.editor.txt.html();
     //   商品规格属性要转成字符串
       this.form.specsattr = JSON.stringify(this.form.specsattr);
+      
+       if(!this.form.first_cateid){
+        warningAlert("请选择一级分类")
+        return
+      }else if(!this.form.second_cateid){
+         warningAlert("请选择二级分类")
+        return
+      }else if(!this.form.goodsname){
+        warningAlert("商品名称不能为空")
+        return
+      } else if(this.form.price == 0){
+        warningAlert("价格不能为空")
+        return
+      } else if(this.form.market_price ==0){
+         warningAlert("价格不能为空")
+        return
+      }else if(!this.form.img){
+         warningAlert("请选择一张图片")
+        return
+      }else if(!this.form.specsid){
+          warningAlert("请选择商品规格")
+        return
+      }
       requestGoogsAdd(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);

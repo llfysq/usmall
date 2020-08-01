@@ -77,6 +77,7 @@ export default {
         "/goods",
         "/banner",
         "/seckill",
+        "/member"
       ],
       form: {
         pid: 0,
@@ -112,6 +113,10 @@ export default {
     },
     //点击了添加按钮
     add() {
+         if (!this.form.title) {
+        warningAlert("请输入菜单名称");
+        return;
+      } 
       requestMenuAdd(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);

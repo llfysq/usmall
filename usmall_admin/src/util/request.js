@@ -1,15 +1,34 @@
 import axios from "axios"
 import qs from "qs"
-
+import store from "../store"
+import {warningAlert} from "./alert"
+import router from "../router"
+// 打包放入后台将baseUrl置空
+// const baseUrl = ""
+const baseUrl = "/api"
+//请求拦截
+// 判断是不是从登录进来的请求，是的话将token传给给后端authorization
+axios.interceptors.request.use(config => {
+    if (config.url != baseUrl + '/api/userlogin') {
+        config.headers.authorization = store.state.user.token;
+    }
+    return config
+})
 //响应拦截
 axios.interceptors.response.use(res => {
     console.group("本次路径：" + res.config.url)
     console.log(res)
     console.groupEnd()
+// 判断一下后端返回的是不是登录已过期或访问权限受限，是的话就是没有设置token，就让他跳到登录页面
+    if(res.data.msg==="登录已过期或访问权限受限"){
+        warningAlert("登录已过期或访问权限受限")
+        router.push("/login");
+        return;
+    }
     return res;
 })
 
-const baseUrl = "/api"
+
 
 //菜单添加
 export const requestMenuAdd = (params) => {

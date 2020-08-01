@@ -39,7 +39,7 @@ const actions = {
             // console.log(res)
             //没有取到数据
             //判断一页中是否还有数据， 如果这一页没有数据了并且页数是大于1的（页数最少有一页），就将页数减去1
-            if (res.data.list.length == 0 && context.state.page > 1) {
+            if (!res.data.list && context.state.page > 1) {
                 context.commit("changePage", context.state.page - 1);
                 context.dispatch("requestList")
                 return;

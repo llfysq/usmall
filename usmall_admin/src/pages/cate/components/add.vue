@@ -4,7 +4,7 @@
       <el-form :model="form">
         <el-form-item label="上级分类" label-width="100px">
           <el-select v-model="form.pid">
-            <el-option label="--请选择--"  value disabled></el-option>
+            <el-option label="--请选择--" value disabled></el-option>
             <el-option label="顶级分类" :value="0"></el-option>
             <!-- 动态数据渲染到页面 -->
             <el-option v-for="item in list" :key="item.id" :label="item.catename" :value="item.id"></el-option>
@@ -69,7 +69,6 @@ export default {
   methods: {
     ...mapActions({
       requestCateList: "cate/requestList",
-      
     }),
     // 清空
     empty() {
@@ -80,7 +79,6 @@ export default {
         status: 1,
       };
       this.imageUrl = "";
-     
     },
     // 取消
     cancel() {
@@ -114,6 +112,13 @@ export default {
     },
     // 添加
     add() {
+      if (!this.form.catename) {
+        warningAlert("分类名称不能为空");
+        return;
+      } else if (!this.form.img) {
+        warningAlert("请选择图片");
+        return;
+      }
       // 发起添加的请求
       requestCateAdd(this.form).then((res) => {
         if (res.data.code == 200) {
@@ -127,31 +132,29 @@ export default {
         }
       });
     },
-  //  获取一条数据
-  getDetail(id){
-    requestCateDetail({id:id}).then(res=>{
-        this.form=res.data.list;
-        this.form.id=id;
-        this.imageUrl=this.$imgPre+res.data.list.img;
-    })
-  },
-// 修改
-update(){
-    // 发起请求
-    requestCateUpdate(this.form).then(res=>{
-      if(res.data.code==200){
-        successAlert(res.data.msg)
-        this.empty(); //清空
+    //  获取一条数据
+    getDetail(id) {
+      requestCateDetail({ id: id }).then((res) => {
+        this.form = res.data.list;
+        this.form.id = id;
+        this.imageUrl = this.$imgPre + res.data.list.img;
+      });
+    },
+    // 修改
+    update() {
+      // 发起请求
+      requestCateUpdate(this.form).then((res) => {
+        if (res.data.code == 200) {
+          successAlert(res.data.msg);
+          this.empty(); //清空
           this.cancel(); //弹框消失
           //添加成功获取角色列表,发送一个请求将数据渲染到页面
           this.requestCateList();
-      }else{
-        warningAlert(res.data.msg)
-      }
-    })
-}
-
- 
+        } else {
+          warningAlert(res.data.msg);
+        }
+      });
+    },
   },
   mounted() {
     // 判断 如果menu的list没有请求，就发请求，如果有就不用发了

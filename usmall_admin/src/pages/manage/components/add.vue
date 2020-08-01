@@ -77,12 +77,20 @@ export default {
     },
     // 添加
     add() {
+       if (!this.form.username) {
+        warningAlert("请输入用户名");
+        return;
+      } else if (!this.form.password) {
+        warningAlert("请输入密码");
+        return;
+      }
       requestManageAdd(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);
           this.empty();
           this.cancel();
           this.requestManageList();
+          this.requestTotal()
         } else {
           warningAlert(res.data.msg);
         }

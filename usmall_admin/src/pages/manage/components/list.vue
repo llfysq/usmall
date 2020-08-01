@@ -54,7 +54,8 @@ export default {
       requestManageDelete({ uid: id }).then((res) => {
         if (res.data.code === 200) {
           successAlert("删除成功");
-          this.requestList();
+           this.requestTotal();
+          this.requestList(); 
         } else {
           warningAlert(res.data.msg);
         }

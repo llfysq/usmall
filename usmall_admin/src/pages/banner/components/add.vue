@@ -104,6 +104,13 @@ export default {
     },
     // 添加
     add() {
+       if (!this.form.title) {
+        warningAlert("标题不能为空");
+        return;
+      } else if (!this.form.img) {
+        warningAlert("图片不能为空");
+        return;
+      }
       // 发起添加的请求
       requestBannerAdd(this.form).then((res) => {
         if (res.data.code == 200) {

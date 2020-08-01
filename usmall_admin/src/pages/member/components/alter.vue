@@ -77,6 +77,16 @@ export default {
     },
     // // 修改
     update() {
+      if (!this.form.phone) {
+        warningAlert("手机号不能为空");
+        return;
+      } else if (!this.form.nickname) {
+        warningAlert("昵称不能为空");
+        return;
+      }else if (!this.form.password) {
+        warningAlert("密码不能为空");
+        return;
+      }
       requestMemberUpdate(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert("修改成功");

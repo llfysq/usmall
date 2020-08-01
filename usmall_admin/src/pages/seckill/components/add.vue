@@ -154,6 +154,13 @@ export default {
 
     // 添加
     add() {
+       if (!this.form.title) {
+        warningAlert("名称不能为空");
+        return;
+      } else if (!this.value1) {
+        warningAlert("请选择时间");
+        return;
+      }
       requestSeckillAdd(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.msg);

@@ -80,6 +80,10 @@ export default {
       this.form.menus = JSON.stringify(this.$refs.tree.getCheckedKeys());
       // console.log(this.form)
       // 发起添加的请求
+        if (!this.form.rolename) {
+        warningAlert("请输入角色名称");
+        return;
+      }
       requestRoleAdd(this.form).then((res) => {
         if (res.data.code == 200) {
           successAlert(res.data.list); //成功弹出框

@@ -11,30 +11,35 @@
   </div>
 </template>
 <script>
-import {requestManageLogin} from "../../util/request"
-import {successAlert,warningAlert} from "../../util/alert"
+import { requestManageLogin } from "../../util/request";
+import { successAlert, warningAlert } from "../../util/alert";
+import { mapActions } from "vuex";
 export default {
   components: {},
   data() {
     return {
-      user:{
-        username:"",
-        password:""
-      }
+      user: {
+        username: "",
+        password: "",
+      },
     };
   },
   methods: {
-      login(){
-          // this.$router.push("/")
-          requestManageLogin(this.user).then(res=>{
-            if(res.data.code===200){
-              successAlert(res.data.msg)
-              this.$router.push("/")
-            }else{
-              warningAlert(res.data.msg)
-            }
-          })
-      }
+    ...mapActions({
+      changeUser: "changeUser",
+    }),
+    login() {
+      // this.$router.push("/")
+      requestManageLogin(this.user).then((res) => {
+        if (res.data.code === 200) {
+          successAlert(res.data.msg);
+          this.changeUser(res.data.list);
+          this.$router.push("/");
+        } else {
+          warningAlert(res.data.msg);
+        }
+      });
+    },
   },
   mounted() {},
 };
